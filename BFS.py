@@ -1,67 +1,60 @@
 from queue import Queue
 
-adj_list={ 
-	"A" : ["B","D"],
-	"B" : ["A","C"],
-	"C" : ["B"],
-	"D" : ["A", "E", "F"],
-	"E" : ["D", "F", "G"],
-	"F" : ["D", "E", "H"],
-	"G" : ["E", "H"],
-	"H" : ["G","F"]
+# initialize node
+adj_list = {
+    "A": ["B", "C"],
+    "B": ["D", "G"],
+    "C": ["E", "F"],
+    "D": [],
+    "E": ["G"],
+    "F": ["H"],
+    "G": ["H"],
+    "H": [],
 }
 
-#bfs code
+# initialize data structure
 visited = {}
-level = {} # distance
+level = {}
 parent = {}
 bfs_traversal_output = []
 queue = Queue()
 
+# initialize node
 for node in adj_list.keys():
-	visited[node] = False
-	parent[node] = None
-	level[node] = -1
+    visited[node] = False
+    parent[node] = None
+    level[node] = -1
 
-print(visited)
-print(parent)
-print(level)
-
-# dari / source
-s = "E"
+s = "A"  # source node
 visited[s] = True
 level[s] = 0
-queue.put(s)
+queue.put(s)  # put node to queue
 
-# while not queue.empty():
+# start traversing node
+while not queue.empty():
+    node = queue.get()  # get node from queue
+    bfs_traversal_output.append(node)
 
+    # start traversing each child node
+    for child_node in adj_list[node]:
+        if not visited[child_node]:
+            visited[child_node] = True
+            parent[child_node] = node
+            level[child_node] = level[node] + 1
+            queue.put(child_node)  # add child node to queue
 
+# shortest path from source node to target node
+t = "H"  # target node
+t_print = t
 
+path = []
+while t is not None:  # from target node look for its parent
+    path.append(t)
+    t = parent[t]
+path.reverse()
 
-# visited[s] = True
-# level[s] = 0 
-# queue.put(s)
-
-# while not queue.empty():
-# 	u=queue.get()
-# 	bfs_traversal_output.append(u)
-	
-# 	for v in adj_list[u]:
-# 		if not visited[v]:
-# 			visited[v]=True
-# 			parent[v]=u
-# 			level[v]=level[u]+1 
-# 			queue.put(v)  
-
-# print ("bfs")
-# print (bfs_traversal_output)
-
-# v = input("Masukan tempat yang ingin di tuju:")
-
-# path=[]
-# while v is not None:
-# 	path.append(v)
-# 	v=parent[v]
-# path.reverse()
-# print("tempat yang harus dilalui jika menju ke jalan-", v)
-# print(path)
+print("Shortest step from A to H is:")
+print(str(level[t_print]) + " steps")
+print("------------------------------------------")
+print("Shortest path is: ")
+print(path)
